@@ -1,0 +1,28 @@
+{
+    "name": "scop/scop-redirecter",
+    "keywords": [
+        "shopware",
+        "redirect",
+        "plugin"
+    ],
+    "description": "Shopware 5 redirecter plugin",
+    "version": "v1.0.0",
+    "authors": [
+        {
+            "name": "scope01 GmbH",
+            "role": "Manufacturer"
+        }
+    ],
+    "license": "MIT",
+    "type": "shopware-plugin",
+    "require": {},
+    "config": {
+        "optimize-autoloader": true
+    },
+    "autoload": {
+        "psr-4": {
+            "ScopRedirecter\\": "../ScopRedirecter",
+        }
+    }
+
+}
