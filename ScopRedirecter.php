@@ -81,7 +81,7 @@ class ScopRedirecter extends Plugin
     private function removeTables(UninstallContext $context)
     {
         $modelManager = Shopware()->Models();
-        $tool = new SchemaTool($this->container->get('models'));
+        $tool = new SchemaTool($modelManager);
         $classes = [
             $modelManager->getClassMetadata(Redirecter::class)
         ];
