@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="s_plugin_redirecter")
+ * @ORM\Table(name="scop_redirecter")
  * @ORM\Entity(repositoryClass="ScopRedirecter\Models\ScopRedirecterRepository")
  */
 class Redirecter extends ModelEntity

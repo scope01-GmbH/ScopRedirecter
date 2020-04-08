@@ -33,14 +33,12 @@ class ScopRedirecter extends Plugin
     }
 
     /**
-     * Remove widget and remove database schema.
-     *
-     * @param Plugin\Context\UninstallContext $uninstallContext
+     * @param UninstallContext $context
      */
-    public function uninstall(UninstallContext $uninstallContext)
+    public function uninstall(UninstallContext $context)
     {
-        if ($uninstallContext->keepUserData()) {
-            return;
+        if (!$context->keepUserData()) {
+            $this->removeTables($context);
         }
     }
 
@@ -75,5 +73,19 @@ class ScopRedirecter extends Plugin
                 $tool->updateSchema([$class], true);
             }
         }
+    }
+
+    /**
+     * removes created tables
+     */
+    private function removeTables(UninstallContext $context)
+    {
+        $modelManager = Shopware()->Models();
+        $tool = new SchemaTool($this->container->get('models'));
+        $classes = [
+            $modelManager->getClassMetadata(Redirecter::class)
+        ];
+        $tool->dropSchema($classes);
+        $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
     }
 }

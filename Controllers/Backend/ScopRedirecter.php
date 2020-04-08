@@ -52,7 +52,7 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
 
         $queryBuilder = $dbalConnection->createQueryBuilder();
         $queryBuilder->select('*')
-            ->from('s_plugin_redirecter')
+            ->from('scop_redirecter')
             ->where('start_url = "' . $startUrl . '"')
             ->setMaxResults(1);;
         $data = $queryBuilder->execute()->fetchAll();
@@ -118,7 +118,7 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
             for($i=0; $i<$rowCount; $i++)
             {
                 $queryBuilder
-                    ->insert('s_plugin_redirecter')
+                    ->insert('scop_redirecter')
                     ->values(['start_url' => '?', 'target_url' => '?', 'http_code' => '?',])
                     ->setParameters([
                         0 => $csvSetArray[$i][1],
@@ -154,7 +154,7 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
         //query data
         $queryBuilder = $dbalConnection->createQueryBuilder();
         $queryBuilder->select('*')
-            ->from('s_plugin_redirecter');
+            ->from('scop_redirecter');
         $data = $queryBuilder->execute()->fetchAll();
 
 
