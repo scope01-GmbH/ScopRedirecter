@@ -78,20 +78,22 @@ class RequestSubscriber implements SubscriberInterface
         /** @var \Enlight_Controller_Request_Request $request */
 
         $request = $controller->Request();
-        $requestedUri = $request->getRequestUri();
+        if ($request->getModuleName() !== 'backend') {
+            $requestedUri = $request->getRequestUri();
 
-        $redirecterRepo = Shopware()->Container()->get('models')->getRepository(Redirecter::class);
-        $data = $redirecterRepo->getRedirect($requestedUri);
+            $redirecterRepo = Shopware()->Container()->get('models')->getRepository(Redirecter::class);
+            $data = $redirecterRepo->getRedirect($requestedUri);
 
-        $target = (string)$data[0]["targetUrl"];
-        $trimmedTarget = trim($target, "/");
+            $target = (string)$data[0]["targetUrl"];
+            $trimmedTarget = trim($target, "/");
 
-        $httpCode = $data[0]["httpCode"];
-        if ($target !== '' ) {
-            if($httpCode === "301" || $httpCode === "302"){
-                $this->redirectUrl($trimmedTarget, $httpCode, $response);
-            }else{
-                $this->redirectUrl($trimmedTarget, 302, $response);
+            $httpCode = $data[0]["httpCode"];
+            if ($target !== '' ) {
+                if($httpCode === "301" || $httpCode === "302"){
+                    $this->redirectUrl($trimmedTarget, $httpCode, $response);
+                }else{
+                    $this->redirectUrl($trimmedTarget, 302, $response);
+                }
             }
         }
     }

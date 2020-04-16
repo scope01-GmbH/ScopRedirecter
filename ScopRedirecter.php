@@ -6,6 +6,8 @@ use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 use Shopware\Components\Plugin\Context\UpdateContext;
+use Shopware\Components\Plugin\Context\ActivateContext;
+use Shopware\Components\Plugin\Context\DeactivateContext;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use ScopRedirecter\Models\Redirecter;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -22,14 +24,31 @@ class ScopRedirecter extends Plugin
      */
     public function install(InstallContext $installContext)
     {
-        parent::install($installContext);
-        $this->createNewTables();
+      $schemaManager = Shopware()->Container()->get('dbal_connection')->getSchemaManager();
+
+      if ($schemaManager->tablesExist(['scop_redirecter']) === false) {
+          $this->createTables();
+      } else {
+          $this->updateTables();
+      }
+
+      parent::install($installContext);
     }
 
     public function update(UpdateContext $updateContext)
     {
-        $updateContext->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
-        $this->createNewTables();
+        $this->updateTables();
+        parent::update($updateContext);
+    }
+
+    public function deactivate(DeactivateContext $context)
+    {
+        parent::deactivate($context);
+    }
+
+    public function activate(ActivateContext $context)
+    {
+        parent::activate($context);
     }
 
     /**
@@ -38,8 +57,9 @@ class ScopRedirecter extends Plugin
     public function uninstall(UninstallContext $context)
     {
         if (!$context->keepUserData()) {
-            $this->removeTables($context);
+            $this->removeTables();
         }
+        parent::uninstall($context);
     }
 
     /**
@@ -55,30 +75,38 @@ class ScopRedirecter extends Plugin
      * creates database tables on base of doctrine models
      *
      */
-    private function createNewTables()
+    private function createTables()
     {
-        $schemaManager = Shopware()->Container()->get('models')->getConnection()->getSchemaManager();
-        $tool = new SchemaTool($this->container->get('models'));
+      $modelManager = Shopware()->Models();
+       $tool = new SchemaTool($modelManager);
 
-        //getting Redirecter Class
-        $classes = [
-            $this->container->get('models')->getClassMetadata(Redirecter::class)
-        ];
+       $classes = [
+           $modelManager->getClassMetadata(Redirecter::class)
+       ];
 
-        //checking if tables exist and if not => create new table
-        foreach ($classes as $class) {
-            if (!$schemaManager->tablesExist([$class->getTableName()])) {
-                $tool->createSchema([$class]);
-            } else {
-                $tool->updateSchema([$class], true);
-            }
-        }
+       $tool->createSchema($classes);
+    }
+
+    /**
+     * creates database tables on base of doctrine models
+     *
+     */
+    private function updateTables()
+    {
+      $modelManager = Shopware()->Models();
+       $tool = new SchemaTool($modelManager);
+
+       $classes = [
+           $modelManager->getClassMetadata(Redirecter::class)
+       ];
+
+       $tool->updateSchema($classes, true);
     }
 
     /**
      * removes created tables
      */
-    private function removeTables(UninstallContext $context)
+    private function removeTables()
     {
         $modelManager = Shopware()->Models();
         $tool = new SchemaTool($modelManager);
@@ -86,6 +114,5 @@ class ScopRedirecter extends Plugin
             $modelManager->getClassMetadata(Redirecter::class)
         ];
         $tool->dropSchema($classes);
-        $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
     }
 }
