@@ -59,7 +59,9 @@ class ScopRedirecter extends Plugin
         if (!$context->keepUserData()) {
             $this->removeTables();
         }
-        parent::uninstall($context);
+        if ($context->getPlugin()->getActive()) {
+            $context->scheduleClearCache(UninstallContext::CACHE_LIST_ALL);
+        }
     }
 
     /**
