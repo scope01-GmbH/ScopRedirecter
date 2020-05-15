@@ -98,7 +98,7 @@ class RequestSubscriber implements SubscriberInterface
 
             $httpCode = $data[0]["httpCode"];
             if ($target !== '' ) {
-                if($httpCode === "301" || $httpCode === "302"){
+                if($httpCode === 301 || $httpCode === 302){
                     $this->redirectUrl($trimmedTarget, $httpCode, $response);
                 }else{
                     $this->redirectUrl($trimmedTarget, 302, $response);
