@@ -79,7 +79,7 @@ class RequestSubscriber implements SubscriberInterface
         /** @var \Enlight_Controller_Request_Request $request */
 
         $request = $controller->Request();
-        if ($request->getModuleName() !== 'backend') {
+        if ($request->getModuleName() === 'frontend') {
             $requestedUri = $request->getRequestUri();
 
 
