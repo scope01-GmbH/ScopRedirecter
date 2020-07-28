@@ -15,7 +15,7 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
      *
      * @return array|string[]
      */
-    public function getWhitelistedCSRFActions(): array
+    public function getWhitelistedCSRFActions()
     {
         return [
             'export',
