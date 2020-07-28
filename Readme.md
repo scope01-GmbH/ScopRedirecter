@@ -2,7 +2,7 @@
 
 | Version 	| Requirements               	| Availability                            	|
 |---------	|----------------------------	|-----------------------------------------	|
-| 1.0     	| Min. Shopware 5.5, PHP 5.6 	| Github                                	|
+| 1.0.4     	| Min. Shopware 5.5.10    	| Github                                	|
 
 # Installation
 
