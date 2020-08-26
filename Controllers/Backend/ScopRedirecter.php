@@ -121,9 +121,9 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
                     ->insert('scop_redirecter')
                     ->values(['start_url' => '?', 'target_url' => '?', 'http_code' => '?',])
                     ->setParameters([
-                        0 => $csvSetArray[$i][1],
-                        1 => $csvSetArray[$i][2],
-                        2 => $csvSetArray[$i][3]
+                        0 => $csvSetArray[$i][0],
+                        1 => $csvSetArray[$i][1],
+                        2 => $csvSetArray[$i][2]
                     ]);
                 try{
                     $queryBuilder->execute();
