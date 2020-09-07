@@ -1,11 +1,17 @@
-<?php
+<?php declare(strict_types=1);
+/**
+ * Implemented by scope01 GmbH team https://scope01.com
+ *
+ * @copyright scope01 GmbH https://scope01.com
+ * @license proprietär
+ * @link https://scope01.com
+ */
 
 namespace ScopRedirecter\Subscriber;
 
-use Enlight\Event\SubscriberInterface;
 use Doctrine\DBAL\Connection;
+use Enlight\Event\SubscriberInterface;
 use ScopRedirecter\Models\Redirecter;
-
 
 class RequestSubscriber implements SubscriberInterface
 {
@@ -63,7 +69,6 @@ class RequestSubscriber implements SubscriberInterface
     }
 
 
-
     /**
      * Pre Dispatch, watches if requested Route matches a start_url of a redirect in DB and redirects accordingly
      *
@@ -88,7 +93,7 @@ class RequestSubscriber implements SubscriberInterface
             $target = (string)$data[0]["targetUrl"];
             $trimmedTarget = trim($target, "/");
 
-            if ($target === '' ){
+            if ($target === '') {
                 $basePath = Shopware()->Shop()->getBasePath();
                 $unsetBasePath = ltrim($requestedUri, $basePath);
                 $data = $redirecterRepo->getRedirect("/" . $unsetBasePath);
@@ -97,10 +102,10 @@ class RequestSubscriber implements SubscriberInterface
             }
 
             $httpCode = $data[0]["httpCode"];
-            if ($target !== '' ) {
-                if($httpCode === 301 || $httpCode === 302){
+            if ($target !== '') {
+                if ($httpCode === 301 || $httpCode === 302) {
                     $this->redirectUrl($trimmedTarget, $httpCode, $response);
-                }else{
+                } else {
                     $this->redirectUrl($trimmedTarget, 302, $response);
                 }
             }
@@ -114,13 +119,20 @@ class RequestSubscriber implements SubscriberInterface
      * @param string $targetCode
      * @param object $resObj
      */
-    protected function redirectUrl($targetURL, $targetCode, $resObj){
-        if(substr($targetURL, 0,5) === "http:" || substr($targetURL, 0,6) === "https:" ){
+    protected function redirectUrl($targetURL, $targetCode, $resObj)
+    {
+        if (substr($targetURL, 0, 5) === "http:" || substr($targetURL, 0, 6) === "https:") {
             $resObj->setRedirect($targetURL, $targetCode);
-        }elseif(substr($targetURL, 0,4) === "www."){
+        } elseif (substr($targetURL, 0, 4) === "www.") {
             $resObj->setRedirect("http://" . $targetURL, $targetCode);
-        }else{
-            $resObj->setRedirect("/" . $targetURL . "/", $targetCode);
+        } else {
+            if (strpos($targetURL, '?')) {
+                $targetURL = "/" . $targetURL;
+            } else {
+                $targetURL = "/" . $targetURL . "/";
+            }
+
+            $resObj->setRedirect( $targetURL , $targetCode);
         }
     }
 }
