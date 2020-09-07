@@ -1,7 +1,9 @@
 # Shopware 5 redirecter plugin
 
-| Version 	| Requirements               	| Availability                            	|
-|---------	|----------------------------	|-----------------------------------------	|
+| Version 	| Requirements               	| Availability                            |
+|---------	|----------------------------	|-----------------------------------------|
+| 1.0.5     	| Min. Shopware 5.5.0    	  | Github                                	|
+|---------	|----------------------------	|-----------------------------------------|
 | 1.0.4     	| Min. Shopware 5.5.10    	| Github                                	|
 
 # Installation
@@ -18,4 +20,4 @@
 
 ## Install with composer
 * Change to your root Installation of shopware
-* Run command `composer require scop/scop-redirecter` and install and active plugin with Plugin Manager 
+* Run command `composer require scop/scop-redirecter` and install and active plugin with Plugin Manager

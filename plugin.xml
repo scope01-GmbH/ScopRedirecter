@@ -4,13 +4,18 @@
     <label lang="de">Redirect Manager</label>
     <label lang="en">Redirect Manager</label>
 
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <copyright>(c) scope01 GmbH</copyright>
     <license>MIT</license>
     <link>scope01.de</link>
     <author>scope01 GmbH</author>
 
-    <compatibility minVersion="5.5.10" />
+    <compatibility minVersion="5.5.0" />
+
+    <changelog version="1.0.5">
+        <changes lang="de">Support für Shopware Version 5.5.0</changes>
+        <changes lang="en">Support for Shopware version 5.5.0</changes>
+    </changelog>
 
     <changelog version="1.0.4">
         <changes lang="de">Support für Shopware Version 5.5.10</changes>
