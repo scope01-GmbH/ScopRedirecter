@@ -19,21 +19,15 @@ class PluginTest extends TestCase
     protected $plugin;
 
     protected $set = [
-        ["/test/", "/checkout/cart/", 301],
+        ["/account", "/checkout/cart/", 301],
         ["/test", "/account/", 301],
-        ["/google", "www.google.com", 302]
+        ["/googling", "www.google.com", 302],
+        ["/google", "/account/", 302],
+        ["/men", "/checkout", 301],
+        ["/women", "/checkout?c=5", 301]
     ];
 
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $testIt = $this->runRedirectsTest();
-
-    }
-
-    public function tearDown()
+    public function tearDown(): void
     {
         $connection = Shopware()->Container()->get('dbal_connection');
         $queryBuilder = $connection->createQueryBuilder();
@@ -57,7 +51,7 @@ class PluginTest extends TestCase
         $this->assertInstanceOf(Plugin::class, $plugin);
     }
 
-    public function runRedirectsTest()
+    public function testRunRedirects()
     {
 
         $host = Shopware()->Config()->base_path;
@@ -91,6 +85,17 @@ class PluginTest extends TestCase
 
         $response = $client->get($testSets[2][0], ['allow_redirects' => true,]);
         $this->assertSame($response->getEffectiveUrl(), 'http://' . $testSets[2][1]);
+
+        $response = $client->get($testSets[3][0], ['allow_redirects' => true,]);
+        $this->assertSame($response->getEffectiveUrl(), 'http://' . $host .  $testSets[3][1]);
+
+        // Check if the page will be "/checkout/" for redirect url "/checkout"
+        $response = $client->get($testSets[4][0], ['allow_redirects' => true,]);
+        $this->assertSame($response->getEffectiveUrl(), 'http://' . $host .  $testSets[4][1]  . "/");
+
+        // Check if the page will be "/checkout?c=5" for redirect url "/checkout?c=5"
+        $response = $client->get($testSets[5][0], ['allow_redirects' => true,]);
+        $this->assertSame($response->getEffectiveUrl(), 'http://' . $host .  $testSets[5][1]  );
 
 
         return $testSets;

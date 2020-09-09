@@ -2,9 +2,10 @@
 
 namespace ScopRedirecter\Subscriber;
 
-use Doctrine\DBAL\Connection;
 use Enlight\Event\SubscriberInterface;
+use Doctrine\DBAL\Connection;
 use ScopRedirecter\Models\Redirecter;
+
 
 class RequestSubscriber implements SubscriberInterface
 {
@@ -62,6 +63,7 @@ class RequestSubscriber implements SubscriberInterface
     }
 
 
+
     /**
      * Pre Dispatch, watches if requested Route matches a start_url of a redirect in DB and redirects accordingly
      *
@@ -69,7 +71,6 @@ class RequestSubscriber implements SubscriberInterface
      */
     public function onPreRoutingDispatch(\Enlight_Event_EventArgs $args)
     {
-
         //get controller and response object
         $controller = $args->getSubject();
         $response = $controller->Response();
@@ -77,16 +78,20 @@ class RequestSubscriber implements SubscriberInterface
         /** @var \Enlight_Controller_Request_Request $request */
 
         $request = $controller->Request();
+        $requestUriType = $request->getQuery()['controller'];
+
         if ($request->getModuleName() === 'frontend') {
             $requestedUri = $request->getRequestUri();
 
-
             $redirecterRepo = Shopware()->Container()->get('models')->getRepository(Redirecter::class);
+
             $data = $redirecterRepo->getRedirect($requestedUri);
+
             $target = (string)$data[0]["targetUrl"];
+
             $trimmedTarget = trim($target, "/");
 
-            if ($target === '') {
+            if ($target === '' ){
                 $basePath = Shopware()->Shop()->getBasePath();
                 $unsetBasePath = ltrim($requestedUri, $basePath);
                 $data = $redirecterRepo->getRedirect("/" . $unsetBasePath);
@@ -95,11 +100,11 @@ class RequestSubscriber implements SubscriberInterface
             }
 
             $httpCode = $data[0]["httpCode"];
-            if ($target !== '') {
-                if ($httpCode === 301 || $httpCode === 302) {
-                    $this->redirectUrl($trimmedTarget, $httpCode, $response);
-                } else {
-                    $this->redirectUrl($trimmedTarget, 302, $response);
+            if ($target !== '' ) {
+                if($httpCode === 301 || $httpCode === 302){
+                    $this->redirectUrl($trimmedTarget, $httpCode, $response, $requestUriType);
+                }else{
+                    $this->redirectUrl($trimmedTarget, 302, $response, $requestUriType);
                 }
             }
         }
@@ -112,20 +117,22 @@ class RequestSubscriber implements SubscriberInterface
      * @param string $targetCode
      * @param object $resObj
      */
-    protected function redirectUrl($targetURL, $targetCode, $resObj)
-    {
-        if (substr($targetURL, 0, 5) === "http:" || substr($targetURL, 0, 6) === "https:") {
+    protected function redirectUrl($targetURL, $targetCode, $resObj, $reqType = null){
+
+        if(substr($targetURL, 0,5) === "http:" || substr($targetURL, 0,6) === "https:" ){
+
             $resObj->setRedirect($targetURL, $targetCode);
-        } elseif (substr($targetURL, 0, 4) === "www.") {
+        }elseif(substr($targetURL, 0,4) === "www."){
+
             $resObj->setRedirect("http://" . $targetURL, $targetCode);
-        } else {
-            if (strpos($targetURL, '?')) {
+        }else{
+            if (strpos($targetURL, '?') || $reqType === "detail") {
                 $targetURL = "/" . $targetURL;
             } else {
                 $targetURL = "/" . $targetURL . "/";
             }
 
-            $resObj->setRedirect( $targetURL , $targetCode);
+            $resObj->setRedirect($targetURL , $targetCode);
         }
     }
 }
