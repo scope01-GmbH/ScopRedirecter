@@ -16,11 +16,12 @@ class PluginTest extends TestCase
     protected $plugin;
 
     protected $set = [
-        ["/details", "/checkout/cart/", 301],
-        ["/test", "/account/", 301],
-        ["/googling", "www.google.com", 302],
-        ["/google", "/account/", 302],
-        ["/women", "/checkout?c=5", 301],
+      ["/details", "/checkout/cart/", 301],
+      ["/test", "/account/", 301],
+      ["/googling", "www.google.com", 302],
+      ["/google", "/account/", 302],
+      ["/men", "/checkout", 301],
+      ["/women", "/checkout?c=5", 301]
     ];
 
     public function tearDown(): void
@@ -81,13 +82,6 @@ class PluginTest extends TestCase
             }
         }
 
-//        foreach($testSets as $set){
-//            echo $set[1] . " => ";
-//            $response = $client->get($set[0], ['allow_redirects' => true,]);
-//            echo $response->getEffectiveUrl() . " :::: ";
-//            echo $this->getEffectiveUrl($response->getEffectiveUrl(), $dontAddSlash, $set[1]);
-//            echo "\n";
-//        } die;
 
         //test all the created redirects
         $response = $client->get($testSets[0][0], ['allow_redirects' => true,]);
@@ -106,10 +100,6 @@ class PluginTest extends TestCase
         // Check if the page will be "/checkout/" for redirect url "/checkout"
         $response = $client->get($testSets[4][0], ['allow_redirects' => true,]);
         $this->assertSame($this->getEffectiveUrl($response->getEffectiveUrl(), $dontAddSlash, $testSets[4][1]), $this->getTargetUrl($testSets[4][1], $dontAddSlash, $host));
-
-        // Check if the page will be "/checkout?c=5" for redirect url "/checkout?c=5"
-//        $response = $client->get($testSets[5][0], ['allow_redirects' => true,]);
-//        $this->assertSame($this->getEffectiveUrl($response->getEffectiveUrl(), $dontAddSlash, $testSets[5][1]), $this->getTargetUrl($testSets[5][1], $dontAddSlash, $host));
 
 
         return $testSets;
