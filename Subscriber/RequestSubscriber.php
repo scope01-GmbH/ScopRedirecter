@@ -78,7 +78,6 @@ class RequestSubscriber implements SubscriberInterface
         /** @var \Enlight_Controller_Request_Request $request */
 
         $request = $controller->Request();
-        $requestUriType = $request->getQuery()['controller'];
 
         if ($request->getModuleName() === 'frontend') {
             $requestedUri = $request->getRequestUri();
@@ -104,7 +103,7 @@ class RequestSubscriber implements SubscriberInterface
                 if($httpCode === 301 || $httpCode === 302){
                     $this->redirectUrl($trimmedTarget, $httpCode, $response, $requestUriType);
                 }else{
-                    $this->redirectUrl($trimmedTarget, 302, $response, $requestUriType);
+                    $this->redirectUrl($trimmedTarget, 302, $response);
                 }
             }
         }
@@ -117,7 +116,7 @@ class RequestSubscriber implements SubscriberInterface
      * @param string $targetCode
      * @param object $resObj
      */
-    protected function redirectUrl($targetURL, $targetCode, $resObj, $reqType = null){
+    protected function redirectUrl($targetURL, $targetCode, $resObj){
 
         if(substr($targetURL, 0,5) === "http:" || substr($targetURL, 0,6) === "https:" ){
 
@@ -126,7 +125,7 @@ class RequestSubscriber implements SubscriberInterface
 
             $resObj->setRedirect("http://" . $targetURL, $targetCode);
         }else{
-            if (strpos($targetURL, '?') || $reqType === "detail") {
+            if (strpos($targetURL, '?')) {
                 $targetURL = "/" . $targetURL;
             } else {
                 $targetURL = "/" . $targetURL . "/";
