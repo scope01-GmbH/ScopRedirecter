@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.3/engine/Shopware/Components/Plugin/schema/config.xsd">
+    <elements>
+        <element type="boolean">
+            <name>dontAddSlash</name>
+            <label lang="de">Keinen Schrägstrich am Ende der URL hinzufügen</label>
+            <label lang="en">Don't Add slash at the url end</label>
+            <value>false</value>
+            <description lang="de">Kein "/" am Ende der URL hinzufügen</description>
+            <description lang="en">Dont add "/" at the url end</description>
+        </element>
+    </elements>
+</config>
