@@ -12,6 +12,11 @@
 
     <compatibility minVersion="5.5.0" />
 
+    <changelog version="1.0.6">
+        <changes lang="de">Das automatische Hinzufügen von "/" am Ende der URL-Umleitung wurde entfernt</changes>
+        <changes lang="en">Removed auto-adding "/" at the end of redirecting URL</changes>
+    </changelog>
+
     <changelog version="1.0.5">
         <changes lang="de">Support für Shopware Version 5.5.0</changes>
         <changes lang="en">Support for Shopware version 5.5.0</changes>

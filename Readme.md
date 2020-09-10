@@ -20,3 +20,7 @@
 ## Install with composer
 * Change to your root Installation of shopware
 * Run command `composer require scop/scop-redirecter` and install and active plugin with Plugin Manager
+
+## Plugin Features:
+* Adding the slash at the end of the redirecting url if the configuration of "Dont Add Slash" is set to false
+* Doesn't change the url if it is an absolute URL that starts with ("http:" or "www.")
