@@ -2,13 +2,10 @@
 
 namespace ScopRedirecter\Tests;
 
-use ScopRedirecter\ScopRedirecter as Plugin;
-use PHPUnit\Framework\TestCase;
-use Doctrine\DBAL\Connection;
-use Shopware\Components\HttpClient\GuzzleHttpClient;
-use Shopware\Components\HttpClient\GuzzleFactory;
 use GuzzleHttp;
 use GuzzleHttp\TransferStats;
+use PHPUnit\Framework\TestCase;
+use ScopRedirecter\ScopRedirecter as Plugin;
 
 class PluginTest extends TestCase
 {
@@ -19,12 +16,11 @@ class PluginTest extends TestCase
     protected $plugin;
 
     protected $set = [
-        ["/account", "/checkout/cart/", 301],
+        ["/details", "/checkout/cart/", 301],
         ["/test", "/account/", 301],
         ["/googling", "www.google.com", 302],
         ["/google", "/account/", 302],
-        ["/men", "/checkout", 301],
-        ["/women", "/checkout?c=5", 301]
+        ["/women", "/checkout?c=5", 301],
     ];
 
     public function tearDown(): void
@@ -34,7 +30,7 @@ class PluginTest extends TestCase
         $testSets = $this->set;
         $setCount = count($testSets);
 
-        for($i=0; $i<$setCount; $i++) {
+        for ($i = 0; $i < $setCount; $i++) {
             $queryBuilder
                 ->delete('scop_redirecter')
                 ->where('scop_redirecter.start_url = "' . $testSets[$i][0] . '"');
@@ -61,7 +57,7 @@ class PluginTest extends TestCase
         $testSets = $this->set;
         $setCount = count($testSets);
 
-        for($i=0; $i<$setCount; $i++) {
+        for ($i = 0; $i < $setCount; $i++) {
             $queryBuilder
                 ->insert('scop_redirecter')
                 ->values(['start_url' => '?', 'target_url' => '?', 'http_code' => '?',])
@@ -76,28 +72,78 @@ class PluginTest extends TestCase
 
         $client = new GuzzleHttp\Client(['base_url' => 'http://' . $host]);
 
+        // Getting plugin Configuration
+        $pluginConfig = Shopware()->container()->get('shopware.plugin.config_reader')->getByPluginName('ScopRedirecter');
+
+        if (is_array($pluginConfig)) {
+            if (isset($pluginConfig['dontAddSlash'])) {
+                $dontAddSlash = $pluginConfig['dontAddSlash'];
+            }
+        }
+
+//        foreach($testSets as $set){
+//            echo $set[1] . " => ";
+//            $response = $client->get($set[0], ['allow_redirects' => true,]);
+//            echo $response->getEffectiveUrl() . " :::: ";
+//            echo $this->getEffectiveUrl($response->getEffectiveUrl(), $dontAddSlash, $set[1]);
+//            echo "\n";
+//        } die;
+
         //test all the created redirects
         $response = $client->get($testSets[0][0], ['allow_redirects' => true,]);
-        $this->assertSame($response->getEffectiveUrl(), 'http://' . $host . $testSets[0][1]);
+        $this->assertSame($this->getEffectiveUrl($response->getEffectiveUrl(), $dontAddSlash, $testSets[0][1]), $this->getTargetUrl($testSets[0][1], $dontAddSlash, $host));
 
         $response = $client->get($testSets[1][0], ['allow_redirects' => true,]);
-        $this->assertSame($response->getEffectiveUrl(), 'http://' . $host . $testSets[1][1]);
+        $this->assertSame($this->getEffectiveUrl($response->getEffectiveUrl(), $dontAddSlash, $testSets[1][1]), $this->getTargetUrl($testSets[1][1], $dontAddSlash, $host));
 
         $response = $client->get($testSets[2][0], ['allow_redirects' => true,]);
-        $this->assertSame($response->getEffectiveUrl(), 'http://' . $testSets[2][1]);
+        $this->assertSame($response->getEffectiveUrl(), $this->getTargetUrl($testSets[2][1], $dontAddSlash, $host));
+
 
         $response = $client->get($testSets[3][0], ['allow_redirects' => true,]);
-        $this->assertSame($response->getEffectiveUrl(), 'http://' . $host .  $testSets[3][1]);
+        $this->assertSame($this->getEffectiveUrl($response->getEffectiveUrl(), $dontAddSlash, $testSets[3][1]), $this->getTargetUrl($testSets[3][1], $dontAddSlash, $host));
 
         // Check if the page will be "/checkout/" for redirect url "/checkout"
         $response = $client->get($testSets[4][0], ['allow_redirects' => true,]);
-        $this->assertSame($response->getEffectiveUrl(), 'http://' . $host .  $testSets[4][1]  . "/");
+        $this->assertSame($this->getEffectiveUrl($response->getEffectiveUrl(), $dontAddSlash, $testSets[4][1]), $this->getTargetUrl($testSets[4][1], $dontAddSlash, $host));
 
         // Check if the page will be "/checkout?c=5" for redirect url "/checkout?c=5"
-        $response = $client->get($testSets[5][0], ['allow_redirects' => true,]);
-        $this->assertSame($response->getEffectiveUrl(), 'http://' . $host .  $testSets[5][1]  );
+//        $response = $client->get($testSets[5][0], ['allow_redirects' => true,]);
+//        $this->assertSame($this->getEffectiveUrl($response->getEffectiveUrl(), $dontAddSlash, $testSets[5][1]), $this->getTargetUrl($testSets[5][1], $dontAddSlash, $host));
 
 
         return $testSets;
+    }
+
+    protected function getTargetUrl($targetUrl, $dontAddSlash, $host)
+    {
+
+        if (substr($targetUrl, 0, 5) === "http:" || substr($targetUrl, 0, 4) === "www.") {
+            return 'http://' . $targetUrl;
+        }
+
+        if (!$dontAddSlash && substr($targetUrl, -1) !== "/" && !strpos($targetUrl, '?')) {
+            $targetUrl = "http://" . $host . $targetUrl . "/";
+            return $targetUrl;
+        }
+
+        return "http://" . $host . $targetUrl;
+    }
+
+    protected function getEffectiveUrl($effectiveUrl, $dontAddSlash, $actualUrl)
+    {
+
+        if (substr($actualUrl, 0, 5) === "http:" || substr($actualUrl, 0, 4) === "www.") {
+            return  'http://' . $actualUrl;
+        }
+
+        if($dontAddSlash && substr($actualUrl, -1) === "/"){
+            return substr($effectiveUrl,0 , -1);
+
+        } elseif (substr($effectiveUrl, -1) !== "/" && !strpos($effectiveUrl, "?")) {
+            return $effectiveUrl . "/";
+        }
+
+        return $effectiveUrl ;
     }
 }
