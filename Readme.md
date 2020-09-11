@@ -1,10 +1,10 @@
 # Shopware 5 redirecter plugin
 
-| Version 	| Requirements               	| Availability                            |
-|---------	|----------------------------	|-----------------------------------------|
-| 1.0.6     	| Removed auto-adding "/" at the url end    	  | Github                                	|
-| 1.0.5     	| Min. Shopware 5.5.0    	  | Github                                	|
-| 1.0.4     	| Min. Shopware 5.5.10    	| Github                                	|
+| Version 	| Requirements               	                          | Availability   |
+|---------	|-------------------------------------------------------- |----------------|
+| 1.0.6     | Auto-adding "/" at the url end can be configured   	  | Github         |
+| 1.0.5     | Min. Shopware 5.5.0    	                              | Github         |
+| 1.0.4     | Min. Shopware 5.5.10    	                              | Github         |
 
 # Installation
 
