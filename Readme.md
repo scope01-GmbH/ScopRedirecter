@@ -2,6 +2,7 @@
 
 | Version 	| Requirements               	| Availability                            |
 |---------	|----------------------------	|-----------------------------------------|
+| 1.0.6     	| Removed auto-adding "/" at the url end    	  | Github                                	|
 | 1.0.5     	| Min. Shopware 5.5.0    	  | Github                                	|
 | 1.0.4     	| Min. Shopware 5.5.10    	| Github                                	|
 
@@ -9,7 +10,7 @@
 
 ## Zip Installation package for the Shopware Plugin Manager
 
-* Download the [latest plugin version](https://github.com/scope01-GmbH/ScopRedirecter/releases/latest/) (e.g. `ScopRedirecter-1.0.0.zip`)
+* Download the [latest plugin version](https://github.com/scope01-GmbH/ScopRedirecter/releases/latest/) (e.g. `ScopRedirecter-1.0.6.zip`)
 * Upload and install plugin using Plugin Manager
 
 ## Git Version
