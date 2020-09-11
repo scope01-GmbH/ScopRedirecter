@@ -22,11 +22,6 @@ class RequestSubscriber implements SubscriberInterface
     private $dbalConnection;
 
     /**
-     * @var string
-     */
-    private $pluginName;
-
-    /**
      * @var ConfigReader
      */
     private $pluginConfiguration;
@@ -40,7 +35,6 @@ class RequestSubscriber implements SubscriberInterface
     {
         $this->pluginBaseDirectory = $pluginBaseDirectory;
         $this->dbalConnection = $dbalConnection;
-        $this->pluginName = $pluginName;
         $this->config = $configReader->getByPluginName($pluginName);
     }
 
@@ -97,13 +91,7 @@ class RequestSubscriber implements SubscriberInterface
 
         /** @var \Enlight_Controller_Request_Request $request */
         $request = $controller->Request();
-        $requestUriType = null;
 
-        if(is_array($request->getQuery())){
-            if(isset($request->getQuery()['controller'])){
-                $requestUriType = $request->getQuery()['controller'];
-            }
-        }
 
 
         if ($request->getModuleName() === 'frontend') {
@@ -128,9 +116,9 @@ class RequestSubscriber implements SubscriberInterface
             $httpCode = $data[0]["httpCode"];
             if ($target !== '' ) {
                 if($httpCode === 301 || $httpCode === 302){
-                    $this->redirectUrl($trimmedTarget, $httpCode, $response, $requestUriType, $dontAddSlash);
+                    $this->redirectUrl($trimmedTarget, $httpCode, $response, $dontAddSlash);
                 }else{
-                    $this->redirectUrl($trimmedTarget, 302, $response, $requestUriType, $dontAddSlash);
+                    $this->redirectUrl($trimmedTarget, 302, $response, $dontAddSlash);
                 }
             }
         }
@@ -143,8 +131,7 @@ class RequestSubscriber implements SubscriberInterface
      * @param string $targetCode
      * @param object $resObj
      */
-    protected function redirectUrl($targetURL, $targetCode, $resObj, $reqType, $dontAddSlash){
-
+    protected function redirectUrl($targetURL, $targetCode, $resObj, $dontAddSlash){
         if(substr($targetURL, 0,5) === "http:" || substr($targetURL, 0,6) === "https:" ){
 
             $resObj->setRedirect($targetURL, $targetCode);
@@ -154,6 +141,7 @@ class RequestSubscriber implements SubscriberInterface
         }else{
 
             if (strpos($targetURL, '?') || $dontAddSlash) {
+
               $targetURL = "/" . $targetURL;
             } else {
                 $targetURL = "/" . $targetURL . "/";
