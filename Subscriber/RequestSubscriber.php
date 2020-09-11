@@ -5,37 +5,45 @@ namespace ScopRedirecter\Subscriber;
 use Enlight\Event\SubscriberInterface;
 use Doctrine\DBAL\Connection;
 use ScopRedirecter\Models\Redirecter;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\ConfigReader;
-
 
 class RequestSubscriber implements SubscriberInterface
 {
-
     /**
      * @var string
      */
-    private $pluginBaseDirectory;
+    protected $pluginBaseDirectory;
 
     /**
      * @var Connection
      */
-    private $dbalConnection;
+    protected $dbalConnection;
 
     /**
-     * @var ConfigReader
+     * @var array
      */
-    private $pluginConfiguration;
+    protected $config = [];
+
+    /**
+     * @var ModelManager
+     */
+    protected $modelManager;
 
     /**
      * RequestSubscriber constructor.
-     * @param $pluginBaseDirectory
+     * @param string $pluginBaseDirectory
+     * @param string $pluginName
      * @param Connection $dbalConnection
+     * @param ConfigReader $configReader
+     * @param ModelManager $modelManager
      */
-    public function __construct($pluginBaseDirectory, Connection $dbalConnection, $pluginName , ConfigReader $configReader)
+    public function __construct(string $pluginBaseDirectory, string $pluginName, Connection $dbalConnection, ConfigReader $configReader, ModelManager $modelManager)
     {
         $this->pluginBaseDirectory = $pluginBaseDirectory;
         $this->dbalConnection = $dbalConnection;
         $this->config = $configReader->getByPluginName($pluginName);
+        $this->modelManager = $modelManager;
     }
 
     /**
@@ -69,8 +77,6 @@ class RequestSubscriber implements SubscriberInterface
         $args->getSubject()->View()->extendsTemplate($this->pluginBaseDirectory . '/Resources/views/backend/scope_menu_item.tpl');
     }
 
-
-
     /**
      * Pre Dispatch, watches if requested Route matches a start_url of a redirect in DB and redirects accordingly
      *
@@ -78,13 +84,6 @@ class RequestSubscriber implements SubscriberInterface
      */
     public function onPreRoutingDispatch(\Enlight_Event_EventArgs $args)
     {
-        // Getting the plugin configuration
-        if(is_array($this->config)){
-          if(isset($this->config['dontAddSlash'])){
-            $dontAddSlash = $this->config['dontAddSlash'];
-          }
-        }
-
         //get controller and response object
         $controller = $args->getSubject();
         $response = $controller->Response();
@@ -92,32 +91,39 @@ class RequestSubscriber implements SubscriberInterface
         /** @var \Enlight_Controller_Request_Request $request */
         $request = $controller->Request();
 
-
-
         if ($request->getModuleName() === 'frontend') {
+            $dontAddSlash = false;
+
+            // Getting the plugin configuration
+            if (\is_array($this->config)) {
+                if (isset($this->config['dontAddSlash'])) {
+                    $dontAddSlash = (bool)$this->config['dontAddSlash'];
+                }
+            }
+
             $requestedUri = $request->getRequestUri();
 
-            $redirecterRepo = Shopware()->Container()->get('models')->getRepository(Redirecter::class);
+            $redirecterRepo = $this->modelManager->getRepository(Redirecter::class);
 
             $data = $redirecterRepo->getRedirect($requestedUri);
 
             $target = (string)$data[0]["targetUrl"];
 
-            $trimmedTarget = trim($target, "/");
+            $trimmedTarget = \trim($target, "/");
 
-            if ($target === '' ){
+            if ($target === '') {
                 $basePath = Shopware()->Shop()->getBasePath();
-                $unsetBasePath = ltrim($requestedUri, $basePath);
+                $unsetBasePath = \ltrim($requestedUri, $basePath);
                 $data = $redirecterRepo->getRedirect("/" . $unsetBasePath);
                 $target = (string)$data[0]["targetUrl"];
-                $trimmedTarget = trim($target, "/");
+                $trimmedTarget = \trim($target, "/");
             }
 
             $httpCode = $data[0]["httpCode"];
-            if ($target !== '' ) {
-                if($httpCode === 301 || $httpCode === 302){
+            if ($target !== '') {
+                if ($httpCode === 301 || $httpCode === 302) {
                     $this->redirectUrl($trimmedTarget, $httpCode, $response, $dontAddSlash);
-                }else{
+                } else {
                     $this->redirectUrl($trimmedTarget, 302, $response, $dontAddSlash);
                 }
             }
@@ -128,26 +134,24 @@ class RequestSubscriber implements SubscriberInterface
      * checks if target_url is a full url or path and redirects accordingly
      *
      * @param string $targetURL
-     * @param string $targetCode
-     * @param object $resObj
+     * @param int $targetCode
+     * @param \Enlight_Controller_Response_ResponseHttp $resObj
+     * @param bool $dontAddSlash
      */
-    protected function redirectUrl($targetURL, $targetCode, $resObj, $dontAddSlash){
-        if(substr($targetURL, 0,5) === "http:" || substr($targetURL, 0,6) === "https:" ){
-
+    protected function redirectUrl(string $targetURL, int $targetCode, \Enlight_Controller_Response_ResponseHttp $resObj, bool $dontAddSlash)
+    {
+        if (\substr($targetURL, 0, 5) === "http:" || substr($targetURL, 0, 6) === "https:") {
             $resObj->setRedirect($targetURL, $targetCode);
-        }elseif(substr($targetURL, 0,4) === "www."){
-
+        } elseif (\substr($targetURL, 0, 4) === "www.") {
             $resObj->setRedirect("http://" . $targetURL, $targetCode);
-        }else{
-
-            if (strpos($targetURL, '?') || $dontAddSlash) {
-
-              $targetURL = "/" . $targetURL;
+        } else {
+            if (\strpos($targetURL, '?') || $dontAddSlash) {
+                $targetURL = "/" . $targetURL;
             } else {
                 $targetURL = "/" . $targetURL . "/";
             }
 
-            $resObj->setRedirect($targetURL , $targetCode );
+            $resObj->setRedirect($targetURL, $targetCode);
         }
     }
 }

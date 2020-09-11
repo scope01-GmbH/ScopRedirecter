@@ -7,7 +7,18 @@ Ext.define('Shopware.apps.ScopRedirecter.view.list.Redirecter', {
 
     configure: function() {
         return {
-            detailWindow: 'Shopware.apps.ScopRedirecter.view.detail.Window'
+            detailWindow: 'Shopware.apps.ScopRedirecter.view.detail.Window',
+            columns: {
+                startUrl: {
+                    header: '{s name=start_url}Start URI{/s}'
+                },
+                targetUrl: {
+                    header: '{s name=target_url}Target URI{/s}'
+                },
+                httpCode: {
+                    header: '{s name=http_code}Http Code{/s}'
+                }
+            },
         };
     },
 

@@ -3,13 +3,15 @@
 Ext.define('Shopware.apps.ScopRedirecter.view.detail.Redirecter', {
     extend: 'Shopware.model.Container',
     alias: 'widget.scop-redirecter-detail-container',
+    label301: '{s name=label_301}301 (Moved Permanently){/s}',
+    label302: '{s name=label_302}302 (Found / Moved Temporarily){/s}',
 
     configure: function() {
         var me = this;
         return {
             controller: 'ScopRedirecter',
             fieldSets: [{
-                title: 'Create Redirect',
+                title: '{s name=field_set}Edit redirect{/s}',
                 layout: 'fit',
                 fields: {
                     startUrl: { fieldLabel: '{s name=start_url}Start URI{/s}' },
@@ -39,10 +41,10 @@ Ext.define('Shopware.apps.ScopRedirecter.view.detail.Redirecter', {
             //{literal}
             me.store = Ext.create('Ext.data.Store', {
                 fields: ['id', 'name'],
-                data: [{id: 301, name: "301"}, {
-                    id: 302,
-                    name: "302"
-                }]
+                data: [
+                    {id: 301, name: me.label301},
+                    {id: 302, name: me.label302}
+                ]
             });
             //{/literal}
         }
