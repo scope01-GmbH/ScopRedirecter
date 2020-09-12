@@ -6,8 +6,18 @@ Ext.define('Shopware.apps.ScopRedirecter.view.detail.Redirecter', {
     label301: '{s name=label_301}301 (Moved Permanently){/s}',
     label302: '{s name=label_302}302 (Found / Moved Temporarily){/s}',
 
+    initComponent: function() {
+        let me = this;
+        me.callParent(arguments);
+
+        Shopware.app.Application.on('redirecter-save-successfully', function(me, result, window) {
+            window.destroy();
+        }, me, { single: true });
+    },
+
     configure: function() {
         let me = this;
+
         return {
             controller: 'ScopRedirecter',
             fieldSets: [{
@@ -15,6 +25,7 @@ Ext.define('Shopware.apps.ScopRedirecter.view.detail.Redirecter', {
                 layout: 'fit',
                 fields: {
                     startUrl: {
+                        allowBlank: false,
                         fieldLabel: '{s name=start_url}Start URI{/s}',
                         defaultValue: '/',
                         listeners: {
@@ -26,9 +37,11 @@ Ext.define('Shopware.apps.ScopRedirecter.view.detail.Redirecter', {
                         }
                     },
                     targetUrl: {
+                        allowBlank: false,
                         fieldLabel: '{s name=target_url}Target URI{/s}'
                     },
                     httpCode: {
+                        allowBlank: false,
                         fieldLabel: '{s name=http_code}Http Code{/s}',
                         type: "int",
                         xtype: 'combobox',
