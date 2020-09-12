@@ -13,8 +13,16 @@
     <compatibility minVersion="5.5.0" />
 
     <changelog version="1.0.6">
-        <changes lang="de">Das automatische Hinzufügen von "/" am Ende der URL-Umleitung ist nun konfigurierbar</changes>
-        <changes lang="en">Auto-adding "/" at the end of redirecting URL can be configured</changes>
+        <changes lang="de">
+            - Das automatische Hinzufügen von "/" am Ende der URL-Umleitung ist nun konfigurierbar
+            - Verbesserung der Übersetzungen und der Usability im Backend
+            - Verbessertes Errorhandling und Validierung
+        </changes>
+        <changes lang="en">
+            - Auto-adding "/" at the end of redirecting URL can be configured
+            - Improved translations and usability in backend
+            - Improved error handling and validation
+        </changes>
     </changelog>
 
     <changelog version="1.0.5">

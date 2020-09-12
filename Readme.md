@@ -2,7 +2,9 @@
 
 | Version 	| Requirements               	                          | Availability   |
 |---------	|-------------------------------------------------------- |----------------|
-| 1.0.6     | Auto-adding "/" at the url end can be configured   	  | Github         |
+| 1.0.6     | Auto-adding "/" at the URL can be configured      	  | Github         |
+| 1.0.6     | Improved translations and usability in backend     	  | Github         |
+| 1.0.6     | Improved error handling and validation   	              | Github         |
 | 1.0.5     | Min. Shopware 5.5.0    	                              | Github         |
 | 1.0.4     | Min. Shopware 5.5.10    	                              | Github         |
 
@@ -25,3 +27,8 @@
 ## Plugin Features:
 * Adding the slash at the end of the redirecting url if the configuration of "Dont Add Slash" is set to false
 * Doesn't change the url if it is an absolute URL that starts with ("http:" or "www.")
+
+
+- 
+            - 
+            - 
