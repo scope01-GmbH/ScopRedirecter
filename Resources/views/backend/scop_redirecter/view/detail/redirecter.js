@@ -7,7 +7,7 @@ Ext.define('Shopware.apps.ScopRedirecter.view.detail.Redirecter', {
     label302: '{s name=label_302}302 (Found / Moved Temporarily){/s}',
 
     configure: function() {
-        var me = this;
+        let me = this;
         return {
             controller: 'ScopRedirecter',
             fieldSets: [{
@@ -52,8 +52,8 @@ Ext.define('Shopware.apps.ScopRedirecter.view.detail.Redirecter', {
             }],
         };
     },
-    'getStore': function () {
-        var me = this;
+    getStore: function () {
+        let me = this;
 
         if (!(me.store instanceof Ext.data.Store)) {
             //{literal}

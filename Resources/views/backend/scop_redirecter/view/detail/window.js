@@ -5,6 +5,6 @@ Ext.define('Shopware.apps.ScopRedirecter.view.detail.Window', {
     alias: 'widget.scop-redirecter-detail-window',
     title: '{s name=window_title}Redirect detail{/s}',
     height: 420,
-    width: 900
+    width: 900,
 });
 // {/block}

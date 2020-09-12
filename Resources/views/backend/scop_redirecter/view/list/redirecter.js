@@ -23,7 +23,7 @@ Ext.define('Shopware.apps.ScopRedirecter.view.list.Redirecter', {
     },
 
     createToolbarItems: function () {
-        var me = this, items = [];
+        let me = this, items = [];
         me.fireEvent(me.eventAlias + '-before-create-toolbar-items', me, items);
 
         if (me.getConfig('addButton')) {

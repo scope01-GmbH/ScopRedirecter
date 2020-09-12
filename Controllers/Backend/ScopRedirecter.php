@@ -29,24 +29,67 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
     }
 
     /**
+     * Action for updating existing redirect
+     *
+     * @throws Exception
+     */
+    public function updateAction()
+    {
+        $missingFields = $this->container->get('snippets')
+            ->getNamespace('backend/scop_redirecter/messages/messages')
+            ->get('missing_fields', 'Start URI, Target URI and HTTP Code must be set');
+
+        $redirectExists = $this->container->get('snippets')
+            ->getNamespace('backend/scop_redirecter/messages/messages')
+            ->get('redirect_exists', 'A redirect with the entered start Url already exists');
+
+        $dbalConnection = $this->get('dbal_connection');
+
+        $id = $this->Request()->getParam('id');
+        $startUrl = $this->Request()->getParam('startUrl');
+        $targetUrl = $this->Request()->getParam('targetUrl');
+        $httpCode = $this->Request()->getParam('httpCode');
+
+        $queryBuilder = $dbalConnection->createQueryBuilder();
+        $queryBuilder->select('*')
+            ->from('scop_redirecter')
+            ->where('start_url = "' . $startUrl . '"')
+            ->setMaxResults(1);
+        $data = $queryBuilder->execute()->fetchAll();
+
+        //check if start url already exists
+        if(count($data) > 0 && (int) $data[0]['id'] !== $id){
+            $this->View()->assign(["success" => false,
+                "error" => $redirectExists]);
+        } else {
+            //check for empty entries
+            if($startUrl == "" || $targetUrl == "" || $httpCode == ""){
+                $this->View()->assign(["success" => false,
+                    "error" => $missingFields]);
+            }else {
+                parent::updateAction();
+            }
+        }
+    }
+
+    /**
      * Action for creating a new redirect
      *
      * @throws Exception
      */
     public function createAction()
     {
-
         $createSuccess = $this->container->get('snippets')
             ->getNamespace('backend/scop_redirecter/messages/messages')
-            ->get('create_success', 'Please fill in all red fields');
+            ->get('create_success', 'Redirect created! Please clear your cache and refresh the Table.');
 
         $missingFields = $this->container->get('snippets')
             ->getNamespace('backend/scop_redirecter/messages/messages')
-            ->get('missing_fields', 'Please fill in all red fields');
+            ->get('missing_fields', 'Start URI, Target URI and HTTP Code must be set');
 
         $redirectExists = $this->container->get('snippets')
             ->getNamespace('backend/scop_redirecter/messages/messages')
-            ->get('redirect_exists', 'Please fill in all red fields');
+            ->get('redirect_exists', 'A redirect with the entered start Url already exists');
 
         $dbalConnection = $this->get('dbal_connection');
 
@@ -58,28 +101,22 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
         $queryBuilder->select('*')
             ->from('scop_redirecter')
             ->where('start_url = "' . $startUrl . '"')
-            ->setMaxResults(1);;
+            ->setMaxResults(1);
         $data = $queryBuilder->execute()->fetchAll();
 
         //check if start url already exists
         if(count($data) > 0){
             $this->View()->assign(["success" => false,
-                "error" => $redirectExists,
-                "error_message" => $redirectExists,
-                "message" => $redirectExists]);
+                "error" => $redirectExists]);
         }else{
             //check for empty entries
             if($startUrl == "" || $targetUrl == "" || $httpCode == ""){
                 $this->View()->assign(["success" => false,
-                    "error" => $missingFields,
-                    "error_message" => $missingFields,
-                    "message" => $missingFields]);
+                    "error" => $missingFields]);
             }else {
                 parent::createAction();
-                $this->View()->assign(["success" => false,
-                    "error" => $createSuccess,
-                    "error_message" => $createSuccess,
-                    "message" => $createSuccess]);
+                $this->View()->assign(["success" => true,
+                    "error" => $createSuccess]);
             }
         }
     }
