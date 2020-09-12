@@ -3,21 +3,20 @@
 namespace ScopRedirecter\Models;
 
 use Shopware\Components\Model\ModelRepository;
-
+use Shopware\Components\Model\QueryBuilder;
 
 class ScopRedirecterRepository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects a list of Redirecter
      *
-     * @param null $filter
-     * @param null $orderBy
-     * @param      $offset
-     * @param      $limit
+     * @param array|null $filter
+     * @param array|null $orderBy
+     * @param int        $offset
+     * @param int        $limit
      * @return \Doctrine\ORM\Query
      */
-    public function getListQuery($filter = null, $orderBy = null, $offset, $limit)
+    public function getListQuery($filter, $orderBy, $offset = null, $limit = null)
     {
         $builder = $this->getListQueryBuilder($filter, $orderBy);
         $builder->setFirstResult($offset)
@@ -35,13 +34,19 @@ class ScopRedirecterRepository extends ModelRepository
      */
     public function getListQueryBuilder($filter = null, $orderBy = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder->select(array('redirecter'))
             ->from($this->getEntityName(), 'redirecter');
 
-        $this->addFilter($builder, $filter);
-        $this->addOrderBy($builder, $orderBy);
+        if (!empty($filter)) {
+            $this->addFilter($builder, $filter);
+        }
+
+        if (!empty($orderBy)) {
+            $this->addOrderBy($builder, $orderBy);
+        }
 
         return $builder;
     }

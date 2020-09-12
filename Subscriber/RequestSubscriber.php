@@ -5,6 +5,7 @@ namespace ScopRedirecter\Subscriber;
 use Enlight\Event\SubscriberInterface;
 use Doctrine\DBAL\Connection;
 use ScopRedirecter\Models\Redirecter;
+use ScopRedirecter\Models\ScopRedirecterRepository;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\ConfigReader;
 
@@ -61,9 +62,9 @@ class RequestSubscriber implements SubscriberInterface
     /**
      * Post Dispatch
      *
-     * @param \Enlight_Event_EventArgs $args
+     * @param \Enlight_Controller_ActionEventArgs $args
      */
-    public function onPostDispatch(\Enlight_Event_EventArgs $args)
+    public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
         $controller = $args->getSubject();
         $controller->View()->addTemplateDir($this->pluginBaseDirectory . '/Resources/views');
@@ -80,9 +81,9 @@ class RequestSubscriber implements SubscriberInterface
     /**
      * Pre Dispatch, watches if requested Route matches a start_url of a redirect in DB and redirects accordingly
      *
-     * @param \Enlight_Event_EventArgs $args
+     * @param \Enlight_Controller_EventArgs $args
      */
-    public function onPreRoutingDispatch(\Enlight_Event_EventArgs $args)
+    public function onPreRoutingDispatch(\Enlight_Controller_EventArgs $args)
     {
         //get controller and response object
         $controller = $args->getSubject();
@@ -103,12 +104,12 @@ class RequestSubscriber implements SubscriberInterface
 
             $requestedUri = $request->getRequestUri();
 
+            /** @var ScopRedirecterRepository $redirecterRepo */
             $redirecterRepo = $this->modelManager->getRepository(Redirecter::class);
 
             $data = $redirecterRepo->getRedirect($requestedUri);
 
             $target = (string)$data[0]["targetUrl"];
-
             $trimmedTarget = \trim($target, "/");
 
             if ($target === '') {

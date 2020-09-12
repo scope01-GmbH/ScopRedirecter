@@ -22,11 +22,9 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
         ];
     }
 
-
     /**
      * Action for creating a new redirect
      *
-     * @param Locale $locale
      * @throws Exception
      */
     public function createAction()
@@ -164,6 +162,20 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
             fputcsv($file, $line, ';');
         }
         fclose($file);
+    }
 
+    /**
+     * checks right redirect code
+     *
+     * @param array $data
+     * @return array|void
+     */
+    public function save($data)
+    {
+        if ($data['httpCode'] !== 302 && $data['httpCode'] !== 301) {
+            $data['httpCode'] = 302;
+        }
+
+        parent::save($data);
     }
 }

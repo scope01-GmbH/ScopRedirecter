@@ -6,6 +6,7 @@ use GuzzleHttp;
 use GuzzleHttp\TransferStats;
 use PHPUnit\Framework\TestCase;
 use ScopRedirecter\ScopRedirecter as Plugin;
+use Shopware\Models\Shop\Shop;
 
 class PluginTest extends TestCase
 {
@@ -112,7 +113,10 @@ class PluginTest extends TestCase
     public function testRunRedirects()
     {
         $testSets = $this->set;
-        $host = Shopware()->Config()->base_path;
+
+        /** @var Shop $shop */
+        $shop = Shopware()->Models()->getRepository(Shop::class)->find(1);
+        $host = (string) $shop->getHost();
 
         $client = new GuzzleHttp\Client(['base_url' => 'http://' . $host]);
 
@@ -156,8 +160,8 @@ class PluginTest extends TestCase
     /**
      * set plugin config and clear shop cache
      *
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param bool $value
      * @param bool $sleep
      */
     protected function setConfig($name, $value, $sleep = true)

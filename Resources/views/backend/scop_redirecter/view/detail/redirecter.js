@@ -14,8 +14,20 @@ Ext.define('Shopware.apps.ScopRedirecter.view.detail.Redirecter', {
                 title: '{s name=field_set}Edit redirect{/s}',
                 layout: 'fit',
                 fields: {
-                    startUrl: { fieldLabel: '{s name=start_url}Start URI{/s}' },
-                    targetUrl: { fieldLabel: '{s name=target_url}Target URI{/s}' },
+                    startUrl: {
+                        fieldLabel: '{s name=start_url}Start URI{/s}',
+                        defaultValue: '/',
+                        listeners: {
+                            afterrender: function() {
+                                if (this.getValue() === '') {
+                                    this.setValue(this.defaultValue);
+                                }
+                            }
+                        }
+                    },
+                    targetUrl: {
+                        fieldLabel: '{s name=target_url}Target URI{/s}'
+                    },
                     httpCode: {
                         fieldLabel: '{s name=http_code}Http Code{/s}',
                         type: "int",
@@ -23,10 +35,16 @@ Ext.define('Shopware.apps.ScopRedirecter.view.detail.Redirecter', {
                         queryMode: 'local',
                         displayField: 'name',
                         valueField: 'id',
+                        defaultValue: 302,
                         store: me.getStore(),
-                        'listeners': {
-                            'change': function (combobox, newValue) {
-                                record = me.getStore().findRecord('id', newValue, 0, false, false, true);
+                        listeners: {
+                            change: function (combobox, newValue) {
+                                let record = me.getStore().findRecord('id', newValue, 0, false, false, true);
+                            },
+                            afterrender: function() {
+                                if (this.getValue() === null) {
+                                    this.setValue(this.defaultValue);
+                                }
                             }
                         }
                     }
