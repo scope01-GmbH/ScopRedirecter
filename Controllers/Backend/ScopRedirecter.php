@@ -1,9 +1,15 @@
 <?php
+/**
+ * Implemented by scope01 GmbH team https://scope01.com
+ *
+ * @copyright scope01 GmbH https://scope01.com
+ * @license MIT License
+ * @link https://scope01.com
+ */
 
 use ScopRedirecter\Models\Redirecter;
 use Shopware\Components\CSRFWhitelistAware;
 use Symfony\Component\HttpFoundation\Request;
-use Shopware\Models\Shop\Locale;
 
 class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_Backend_Application implements CSRFWhitelistAware
 {

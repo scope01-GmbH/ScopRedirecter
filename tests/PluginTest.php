@@ -1,4 +1,11 @@
 <?php
+/**
+ * Implemented by scope01 GmbH team https://scope01.com
+ *
+ * @copyright scope01 GmbH https://scope01.com
+ * @license MIT License
+ * @link https://scope01.com
+ */
 
 namespace ScopRedirecter\Tests;
 
