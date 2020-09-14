@@ -58,7 +58,7 @@ class PluginTest extends TestCase
         $pluginConfig = Shopware()->container()->get('shopware.plugin.config_reader')->getByPluginName('ScopRedirecter');
         if (\is_array($pluginConfig)) {
             if (isset($pluginConfig['dontAddSlash'])) {
-                $this->originalConfigValue = (bool) $pluginConfig['dontAddSlash'];
+                $this->originalConfigValue = (bool)$pluginConfig['dontAddSlash'];
             }
         }
 
@@ -123,7 +123,7 @@ class PluginTest extends TestCase
 
         /** @var Shop $shop */
         $shop = Shopware()->Models()->getRepository(Shop::class)->find(1);
-        $host = (string) $shop->getHost();
+        $host = (string)$shop->getHost();
 
         $client = new GuzzleHttp\Client(['base_url' => 'http://' . $host]);
 
@@ -153,7 +153,7 @@ class PluginTest extends TestCase
         $this->assertSame($response->getEffectiveUrl(), 'http://' . $host . $testSets[4][1]);
 
         $response = $client->get($testSets[5][0], ['allow_redirects' => true]);
-        $this->assertSame($response->getEffectiveUrl(), 'http://' . $host . $testSets[5][1] );
+        $this->assertSame($response->getEffectiveUrl(), 'http://' . $host . $testSets[5][1]);
 
         //test behavior of changed plugin setting
         $this->setConfig('dontAddSlash', true);

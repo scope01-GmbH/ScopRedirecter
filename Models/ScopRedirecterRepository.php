@@ -19,8 +19,8 @@ class ScopRedirecterRepository extends ModelRepository
      *
      * @param array|null $filter
      * @param array|null $orderBy
-     * @param int        $offset
-     * @param int        $limit
+     * @param int $offset
+     * @param int $limit
      * @return \Doctrine\ORM\Query
      */
     public function getListQuery($filter, $orderBy, $offset = null, $limit = null)
@@ -66,7 +66,7 @@ class ScopRedirecterRepository extends ModelRepository
             ->where('redirecter.startUrl = :startUrl')
             ->setParameter("startUrl", $requestedUri)
             ->setMaxResults(1);
-            $data =$builder->getQuery()->getArrayResult();
+        $data = $builder->getQuery()->getArrayResult();
         return $data;
     }
 }

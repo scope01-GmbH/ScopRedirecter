@@ -31,15 +31,15 @@ class ScopRedirecter extends Plugin
      */
     public function install(InstallContext $installContext)
     {
-      $schemaManager = Shopware()->Container()->get('dbal_connection')->getSchemaManager();
+        $schemaManager = Shopware()->Container()->get('dbal_connection')->getSchemaManager();
 
-      if ($schemaManager->tablesExist(['scop_redirecter']) === false) {
-          $this->createTables();
-      } else {
-          $this->updateTables();
-      }
+        if ($schemaManager->tablesExist(['scop_redirecter']) === false) {
+            $this->createTables();
+        } else {
+            $this->updateTables();
+        }
 
-      parent::install($installContext);
+        parent::install($installContext);
     }
 
     public function update(UpdateContext $updateContext)
@@ -72,8 +72,8 @@ class ScopRedirecter extends Plugin
     }
 
     /**
-    * @param ContainerBuilder $container
-    */
+     * @param ContainerBuilder $container
+     */
     public function build(ContainerBuilder $container)
     {
         $container->setParameter('scop_redirecter.plugin_dir', $this->getPath());
@@ -86,14 +86,14 @@ class ScopRedirecter extends Plugin
      */
     private function createTables()
     {
-      $modelManager = Shopware()->Models();
-       $tool = new SchemaTool($modelManager);
+        $modelManager = Shopware()->Models();
+        $tool = new SchemaTool($modelManager);
 
-       $classes = [
-           $modelManager->getClassMetadata(Redirecter::class)
-       ];
+        $classes = [
+            $modelManager->getClassMetadata(Redirecter::class)
+        ];
 
-       $tool->createSchema($classes);
+        $tool->createSchema($classes);
     }
 
     /**
@@ -102,14 +102,14 @@ class ScopRedirecter extends Plugin
      */
     private function updateTables()
     {
-      $modelManager = Shopware()->Models();
-       $tool = new SchemaTool($modelManager);
+        $modelManager = Shopware()->Models();
+        $tool = new SchemaTool($modelManager);
 
-       $classes = [
-           $modelManager->getClassMetadata(Redirecter::class)
-       ];
+        $classes = [
+            $modelManager->getClassMetadata(Redirecter::class)
+        ];
 
-       $tool->updateSchema($classes, true);
+        $tool->updateSchema($classes, true);
     }
 
     /**

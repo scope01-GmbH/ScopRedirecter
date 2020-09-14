@@ -28,6 +28,12 @@ Ext.define('Shopware.apps.ScopRedirecter.view.detail.Redirecter', {
                         allowBlank: false,
                         fieldLabel: '{s name=start_url}Start URI{/s}',
                         defaultValue: '/',
+                        validator: function(value) {
+                            if (value.startsWith("/") === false) {
+                                return '{s name=error_message_start_uri}URI must start with a slash{/s}';
+                            }
+                            return true;
+                        },
                         listeners: {
                             afterrender: function() {
                                 if (this.getValue() === '') {
