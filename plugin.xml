@@ -40,6 +40,6 @@
         <changes lang="en">Initial Release</changes>
     </changelog>
 
-    <description lang="de">Ein Plugin zum erstellen und managen von Redirects</description>
-    <description lang="en">A plugin to define and manage redirects</description>
+    <description lang="de">Mit dem SEO Redirekt Plugin der Internetagentur scope01 aus Frankfurt am Main (https://scope01.com/) können Sie schnell und einfach Weiterleitungen im Backend von Shopware verwalten.</description>
+    <description lang="en">With the SEO redirect plugin of the agency scope01 from frankfurt(m) (https://scope01.com/) you are able to create and manage redirects from the admin area of shopware.</description>
 </plugin>
