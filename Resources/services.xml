@@ -6,7 +6,10 @@
     <services>
         <service id="scop_redirecter.subscriber.request_subscriber" class="ScopRedirecter\Subscriber\RequestSubscriber">
             <argument>%scop_redirecter.plugin_dir%</argument>
+            <argument>%scop_redirecter.plugin_name%</argument>
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware.plugin.cached_config_reader" />
+            <argument type="service" id="models" />
             <tag name="shopware.event_subscriber" />
         </service>
     </services>

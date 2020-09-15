@@ -6,7 +6,7 @@
         "plugin"
     ],
     "description": "Shopware 5 redirecter plugin",
-    "version": "v1.0.0",
+    "version": "v1.0.6",
     "authors": [
         {
             "name": "scope01 GmbH",
