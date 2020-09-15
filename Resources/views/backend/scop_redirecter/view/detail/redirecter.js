@@ -65,7 +65,13 @@ Ext.define('Shopware.apps.ScopRedirecter.view.detail.Redirecter', {
                                     this.setValue(this.defaultValue);
                                 }
                             }
-                        }
+                        },
+                        validator: function(value) {
+                            if (value !== me.label301 && value !== me.label302) {
+                                return '{s name=error_message_http_code}HTTP Code must be 301 or 302{/s}';
+                            }
+                            return true;
+                        },
                     }
                 }
             }],

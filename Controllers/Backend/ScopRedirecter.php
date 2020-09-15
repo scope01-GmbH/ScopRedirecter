@@ -53,7 +53,8 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
         $queryBuilder = $dbalConnection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('scop_redirecter')
-            ->where('start_url = "' . $startUrl . '"')
+            ->where('start_url = :startUrl')
+            ->setParameter('startUrl', $startUrl)
             ->setMaxResults(1);
         $data = $queryBuilder->execute()->fetchAll();
 
@@ -100,7 +101,8 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
         $queryBuilder = $dbalConnection->createQueryBuilder();
         $queryBuilder->select('*')
             ->from('scop_redirecter')
-            ->where('start_url = "' . $startUrl . '"')
+            ->where('start_url = :startUrl')
+            ->setParameter('startUrl', $startUrl)
             ->setMaxResults(1);
         $data = $queryBuilder->execute()->fetchAll();
 
@@ -164,7 +166,7 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
                     ->setParameters([
                         0 => $csvSetArray[$i][1],
                         1 => $csvSetArray[$i][2],
-                        2 => $csvSetArray[$i][3]
+                        2 => $this->getHttpCode((int) $csvSetArray[$i][3])
                     ]);
                 try{
                     $queryBuilder->execute();
@@ -215,10 +217,22 @@ class Shopware_Controllers_Backend_ScopRedirecter extends \Shopware_Controllers_
      */
     public function save($data)
     {
-        if ($data['httpCode'] !== 302 && $data['httpCode'] !== 301) {
-            $data['httpCode'] = 302;
-        }
+        $data['httpCode'] = $this->getHttpCode((int) $data['httpCode']);
 
         parent::save($data);
+    }
+
+    /**
+     * validate submitted http code
+     *
+     * @param int $httpCode
+     * @return int
+     */
+    protected function getHttpCode(int $httpCode) {
+        if ($httpCode !== 302 && $httpCode !== 301) {
+            $httpCode = 302;
+        }
+
+        return $httpCode;
     }
 }
