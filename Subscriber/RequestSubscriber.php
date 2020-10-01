@@ -161,5 +161,8 @@ class RequestSubscriber implements SubscriberInterface
 
             $resObj->setRedirect($targetURL, $targetCode);
         }
+
+        $resObj->send();
+        exit;
     }
 }
