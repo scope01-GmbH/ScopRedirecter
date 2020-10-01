@@ -4,13 +4,18 @@
     <label lang="de">Redirect Manager</label>
     <label lang="en">Redirect Manager</label>
 
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <copyright>(c) scope01 GmbH</copyright>
     <license>MIT</license>
     <link>scope01.de</link>
     <author>scope01 GmbH</author>
 
     <compatibility minVersion="5.5.0" />
+
+    <changelog version="1.0.7">
+        <changes lang="de">Fehlermeldungen im Log bei Weiterleitungen behoben</changes>
+        <changes lang="en">Fixed errors in log file on doing redirects</changes>
+    </changelog>
 
     <changelog version="1.0.6">
         <changes lang="de">
