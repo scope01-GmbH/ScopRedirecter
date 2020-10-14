@@ -1,13 +1,14 @@
 # Shopware 5 redirecter plugin
 
-| Version 	| Requirements               	                          | Availability   |
-|---------	|-------------------------------------------------------- |----------------|
-| 1.0.7     | Fixed errors in log file on doing redirects       	  | Github         |
-| 1.0.6     | Auto-adding "/" at the URL can be configured      	  | Github         |
-| 1.0.6     | Improved translations and usability in backend     	  | Github         |
-| 1.0.6     | Improved error handling and validation   	              | Github         |
-| 1.0.5     | Min. Shopware 5.5.0    	                              | Github         |
-| 1.0.4     | Min. Shopware 5.5.10    	                              | Github         |
+| Version 	| Requirements               	                                                            | Availability   |
+|---------	|-------------------------------------------------------------------------------------------|----------------|
+| 1.0.8     | Fixed redirect loop on activated option "Disable appending slash at the end of the URL"   | Github         |
+| 1.0.7     | Fixed errors in log file on doing redirects       	                                    | Github         |
+| 1.0.6     | Auto-adding "/" at the URL can be configured      	                                    | Github         |
+| 1.0.6     | Improved translations and usability in backend     	                                    | Github         |
+| 1.0.6     | Improved error handling and validation   	                                                | Github         |
+| 1.0.5     | Min. Shopware 5.5.0    	                                                                | Github         |
+| 1.0.4     | Min. Shopware 5.5.10    	                                                                | Github         |
 
 
 
@@ -15,7 +16,7 @@
 
 ## Zip Installation package for the Shopware Plugin Manager
 
-* Download the [latest plugin version](https://github.com/scope01-GmbH/ScopRedirecter/releases/latest/) (e.g. `ScopRedirecter-1.0.7.zip`)
+* Download the [latest plugin version](https://github.com/scope01-GmbH/ScopRedirecter/releases/latest/) (e.g. `ScopRedirecter-1.0.8.zip`)
 * Upload and install plugin using Plugin Manager
 
 ## Git Version

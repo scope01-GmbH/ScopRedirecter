@@ -4,13 +4,18 @@
     <label lang="de">Redirect Manager</label>
     <label lang="en">Redirect Manager</label>
 
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <copyright>(c) scope01 GmbH</copyright>
     <license>MIT</license>
     <link>scope01.de</link>
     <author>scope01 GmbH</author>
 
     <compatibility minVersion="5.5.0" />
+
+    <changelog version="1.0.8">
+        <changes lang="de">Weiterleitungsendlosschleife bei aktivierter Option "Slash am Ende der URL deaktivieren" behoben</changes>
+        <changes lang="en">Fixed redirect loop on activated option "Disable appending slash at the end of the URL"</changes>
+    </changelog>
 
     <changelog version="1.0.7">
         <changes lang="de">Fehlermeldungen im Log bei Weiterleitungen behoben</changes>
