@@ -117,7 +117,12 @@ class RequestSubscriber implements SubscriberInterface
             $data = $redirecterRepo->getRedirect($requestedUri);
 
             $target = (string)$data[0]["targetUrl"];
-            $trimmedTarget = \trim($target, "/");
+            $target = \trim($target);
+            if ($dontAddSlash === false) {
+                $trimmedTarget = \trim($target, "/");
+            } else {
+                $trimmedTarget = \ltrim($target, "/");
+            }
 
             if ($target === '') {
                 $basePath = Shopware()->Shop()->getBasePath();
