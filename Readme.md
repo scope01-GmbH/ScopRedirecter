@@ -2,6 +2,7 @@
 
 | Version 	| Requirements               	                                                            | Availability   |
 |---------	|-------------------------------------------------------------------------------------------|----------------|
+| 1.0.9     | Fixed smarty security error in combination with plugin digial publishing in backend       | Github         |
 | 1.0.8     | Fixed redirect loop on activated option "Disable appending slash at the end of the URL"   | Github         |
 | 1.0.7     | Fixed errors in log file on doing redirects       	                                    | Github         |
 | 1.0.6     | Auto-adding "/" at the URL can be configured      	                                    | Github         |
@@ -16,7 +17,7 @@
 
 ## Zip Installation package for the Shopware Plugin Manager
 
-* Download the [latest plugin version](https://github.com/scope01-GmbH/ScopRedirecter/releases/latest/) (e.g. `ScopRedirecter-1.0.8.zip`)
+* Download the [latest plugin version](https://github.com/scope01-GmbH/ScopRedirecter/releases/latest/) (e.g. `ScopRedirecter-1.0.9.zip`)
 * Upload and install plugin using Plugin Manager
 
 ## Git Version

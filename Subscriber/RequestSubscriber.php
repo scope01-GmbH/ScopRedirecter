@@ -61,7 +61,7 @@ class RequestSubscriber implements SubscriberInterface
     {
         return [
             'Enlight_Controller_Front_DispatchLoopStartup' => 'onPreRoutingDispatch',
-            'Enlight_Controller_Action_PostDispatch_Backend_ScopRedirecter' => 'onPostDispatch',
+            'Enlight_Controller_Action_PostDispatch_Backend' => 'onPostDispatch',
             'Enlight_Controller_Action_PostDispatchSecure_Backend' => 'onPostDispatchSecureBackend',
         ];
     }
