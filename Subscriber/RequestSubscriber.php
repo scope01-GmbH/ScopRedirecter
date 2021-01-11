@@ -61,7 +61,7 @@ class RequestSubscriber implements SubscriberInterface
     {
         return [
             'Enlight_Controller_Front_DispatchLoopStartup' => 'onPreRoutingDispatch',
-            'Enlight_Controller_Action_PostDispatch_Backend_ScopRedirecter' => 'onPostDispatch',
+            'Enlight_Controller_Action_PostDispatch_Backend' => 'onPostDispatch',
             'Enlight_Controller_Action_PostDispatchSecure_Backend' => 'onPostDispatchSecureBackend',
         ];
     }
@@ -167,7 +167,12 @@ class RequestSubscriber implements SubscriberInterface
             $resObj->setRedirect($targetURL, $targetCode);
         }
 
-        $resObj->send();
+        if (\method_exists($resObj, 'send') === true) {
+            $resObj->send();
+        } else {
+            $resObj->sendResponse();
+        }
+
         exit;
     }
 }
