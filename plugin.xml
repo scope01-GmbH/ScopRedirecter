@@ -14,7 +14,7 @@
 
     <changelog version="1.0.9">
         <changes lang="de">
-            - Smarty Security Fehler in Verbindung mit Plugin Digial Publishing im Backend behoeben
+            - Smarty Security Fehler in Verbindung mit Plugin Digial Publishing im Backend behoben
             - Shopware 5.5. Kompatibilität verbessert
         </changes>
         <changes lang="en">
