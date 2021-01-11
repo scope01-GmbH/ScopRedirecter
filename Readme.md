@@ -3,7 +3,7 @@
 | Version 	| Requirements               	                                                            | Availability   |
 |---------	|-------------------------------------------------------------------------------------------|----------------|
 | 1.0.9     | Fixed Shopware 5.5 compatibility                                                          | Github         |
-| 1.0.9     | Fixed smarty security error in combination with plugin digial publishing in backend       | Github         |
+| 1.0.9     | Fixed smarty security error in combination with plugin digital publishing in backend       | Github         |
 | 1.0.8     | Fixed redirect loop on activated option "Disable appending slash at the end of the URL"   | Github         |
 | 1.0.7     | Fixed errors in log file on doing redirects       	                                    | Github         |
 | 1.0.6     | Auto-adding "/" at the URL can be configured      	                                    | Github         |
