@@ -167,7 +167,12 @@ class RequestSubscriber implements SubscriberInterface
             $resObj->setRedirect($targetURL, $targetCode);
         }
 
-        $resObj->send();
+        if (\method_exists($resObj, 'send') === true) {
+            $resObj->send();
+        } else {
+            $resObj->sendResponse();
+        }
+
         exit;
     }
 }
